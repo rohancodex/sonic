@@ -1,5 +1,5 @@
 {
-    "name": "my-vue-app",
+    "name": "sonic",
     "private": true,
     "version": "0.0.0",
     "type": "module",
@@ -9,14 +9,6 @@
         "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
         "preview": "vite preview",
         "prepare": "husky install"
-    },
-    "lint-staged": {
-        "*.{js, jsx,ts,tsx}": [
-            "eslint --quiet --fix"
-        ],
-        "*.{json,js,ts,jsx,tsx,html}": [
-            "prettier --write --ignore-unknown"
-        ]
     },
     "dependencies": {
         "react": "^18.2.0",
