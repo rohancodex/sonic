@@ -1,10 +1,9 @@
 function App() {
-
-  return (
-    <>
-
-    </>
-  )
+    return (
+        <>
+            <h1>Sonic APP</h1>
+        </>
+    );
 }
 
-export default App
+export default App;
