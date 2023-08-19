@@ -5,3 +5,5 @@ dist-ssr
 *.local
 node_modules/*
 .eslintrc.json
+*.json
+tailwind.config.js
