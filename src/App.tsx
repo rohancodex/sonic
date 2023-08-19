@@ -1,8 +1,14 @@
+/* eslint-disable no-constant-condition */
+import { RouterProvider } from "react-router-dom";
+
+import { ThemeProvider } from "./providers/ThemeProvider";
+import { protectedRoutes, publicRoutes } from "./Routes";
+
 function App() {
     return (
-        <>
-            <h1>Sonic APP</h1>
-        </>
+        <ThemeProvider defaultTheme="light" storageKey="color-theme">
+            <RouterProvider router={false ? protectedRoutes : publicRoutes} />
+        </ThemeProvider>
     );
 }
 

@@ -1,4 +1,10 @@
 node_modules
-public
-build
+.DS_Store
 dist
+dist-ssr
+*.local
+node_modules/*
+.eslintrc.json
+*.json
+tailwind.config.js
+postcss.config.js
