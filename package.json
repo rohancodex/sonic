@@ -9,9 +9,9 @@
         "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
         "preview": "vite preview",
         "prepare": "husky install",
-        "lint:fix": "pnpm run lint -- --fix",
-        "prettier": "npx prettier src test --check",
-        "prettier:fix": "pnpm prettier -- --write",
+        "lint:fix": "pnpm run lint --fix",
+        "prettier": "npx prettier src --check",
+        "prettier:fix": "pnpm prettier src --write",
         "format": "pnpm prettier:fix && pnpm lint:fix"
     },
     "dependencies": {
