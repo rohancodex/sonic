@@ -2,15 +2,16 @@ import { createBrowserRouter } from "react-router-dom";
 
 import ProtectedLayout from "./layouts/ProtectedLayout";
 import PublicLayout from "./layouts/PublicLayout";
-import Login from "./pages/Auth/Login/Login";
-import Signup from "./pages/Auth/SignUp/Signup";
+import Login from "./pages/Auth/Login";
+import Signup from "./pages/Auth/SignUp";
+import Home from "./pages/Home";
 export const publicRoutes = createBrowserRouter([
     {
         path: "/",
         element: <PublicLayout />,
         children: [
             {
-                path: "login",
+                path: "/",
                 element: <Login />,
             },
             {
@@ -25,5 +26,11 @@ export const protectedRoutes = createBrowserRouter([
     {
         path: "/",
         element: <ProtectedLayout />,
+        children: [
+            {
+                path: "/",
+                element: <Home />,
+            },
+        ],
     },
 ]);
