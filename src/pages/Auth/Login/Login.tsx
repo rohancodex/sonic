@@ -1,91 +1,81 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AtSign, Lock } from "lucide-react";
+import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { z } from "zod";
 
-// import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils";
+import { FormInput, FormPassword } from "@/components/molecules/Form";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { Form } from "@/components/ui/form";
+import { Separator } from "@/components/ui/separator";
+
+import { initialValues, loginUserSchema } from "./helper";
 
 export default function Login() {
+    const form = useForm<z.infer<typeof loginUserSchema>>({
+        resolver: zodResolver(loginUserSchema),
+        defaultValues: initialValues,
+    });
+
+    const onSubmit = (values: z.infer<typeof loginUserSchema>) => {
+        console.log(values);
+    };
     return (
-        <>
-            <div className="hidden md:block">
-                <img
-                    src="https://images.pexels.com/photos/3944105/pexels-photo-3944105.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-                    width={1280}
-                    height={843}
-                    alt="Authentication"
-                    className="block dark:hidden"
-                />
-                <img
-                    src="https://images.pexels.com/photos/3944105/pexels-photo-3944105.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-                    width={1280}
-                    height={843}
-                    alt="Authentication"
-                    className="hidden dark:block"
-                />
-            </div>
-            <div className="container relative hidden h-[800px] flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
-                <Link
-                    to="/login"
-                    className={cn(
-                        // buttonVariants({ variant: "ghost" }),
-                        "absolute right-4 top-4 md:right-8 md:top-8",
-                    )}
-                >
-                    Login
-                </Link>
-                <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
-                    <div className="absolute inset-0 bg-zinc-900" />
-                    <div className="relative z-20 flex items-center text-lg font-medium">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="mr-2 h-6 w-6"
+        <section className="lg:container flex justify-center lg:items-center lg:h-screen">
+            <Card className="w-5/6 lg:p-8 lg:grid lg:grid-cols-2 shadow-[rgba(7,_65,_210,_0.1)_0px_10px_32px]">
+                <CardHeader className="items-center lg:justify-center order-2">
+                    <img
+                        className="w-52 h-52 lg:w-[30rem] lg:h-[30rem]"
+                        src={"/auth.png"}
+                        alt="serene-header"
+                    />
+                </CardHeader>
+                <CardContent className="my-2 order-1 w-5/6">
+                    <h1 className="text-2xl text-gray-600 font-semibold py-6 text-left hidden lg:block">
+                        Continue listening! Just a step away
+                    </h1>
+
+                    <Form {...form}>
+                        <form
+                            onSubmit={form.handleSubmit(onSubmit)}
+                            className="space-y-4"
                         >
-                            <path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" />
-                        </svg>
-                        Sonic
-                    </div>
-                    <div className="relative z-20 mt-auto">
-                        <blockquote className="space-y-2">
-                            <p className="text-lg">One stop for all things music!</p>
-                            <footer className="text-sm">Sofia Davis</footer>
-                        </blockquote>
-                    </div>
-                </div>
-                <div className="lg:p-8">
-                    <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-                        <div className="flex flex-col space-y-2 text-center">
-                            <h1 className="text-2xl font-semibold tracking-tight">
-                                Create an account
-                            </h1>
-                            <p className="text-sm text-muted-foreground">
-                                Enter your email below to create your account
-                            </p>
-                        </div>
-                        {/* <UserAuthForm /> */}
-                        <p className="px-8 text-center text-sm text-muted-foreground">
-                            By clicking continue, you agree to our{" "}
-                            <Link
-                                to="/terms"
-                                className="underline underline-offset-4 hover:text-primary"
-                            >
-                                Terms of Service
-                            </Link>{" "}
-                            and
-                            <Link
-                                to="/privacy"
-                                className="underline underline-offset-4 hover:text-primary"
-                            >
-                                Privacy Policy
+                            <FormInput
+                                className="rounded-lg py-6"
+                                name="email"
+                                control={form.control}
+                                icon={<AtSign className="stroke-slate-400 h-5 w-5" />}
+                                placeholder="Email"
+                            />
+                            <FormPassword
+                                className="rounded-lg py-6"
+                                name="password"
+                                control={form.control}
+                                icon={<Lock className="stroke-slate-400 h-5 w-5" />}
+                                placeholder="Password"
+                            />
+
+                            <Button className="rounded-lg w-full" type="submit">
+                                Sign In
+                            </Button>
+                        </form>
+                    </Form>
+                    <Separator orientation="horizontal" className="my-8" />
+                    <Button className="w-full py-5" variant={"outline"}>
+                        <img className="h-5 w-5 mx-4" src="/google.svg" alt="google" />
+                        <p className="text-gray-700">Continue with Google</p>
+                    </Button>
+                    <CardFooter className="justify-center order-2 pt-6">
+                        <h1 className="text-sm text-gray-600">
+                            {"Don't have an account? "}
+                            <Link to="/signup" className="text-[#186b66] font-medium">
+                                Sign Up
                             </Link>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </>
+                        </h1>
+                    </CardFooter>
+                </CardContent>
+            </Card>
+        </section>
     );
 }

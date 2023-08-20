@@ -37,7 +37,7 @@ const FormInputElement = ({
                             <Input
                                 placeholder={placeholder}
                                 className={cn(
-                                    icon ? "block pl-10 w-full" : "",
+                                    icon ? "block pl-12 w-full text-gray-800" : "",
                                     className,
                                 )}
                                 type={type}

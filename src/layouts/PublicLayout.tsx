@@ -4,7 +4,7 @@ const PublicLayout = () => {
     return (
         <>
             {/* <nav>Navbar</nav> */}
-            <main className="container">
+            <main>
                 <Outlet />
             </main>
             {/* <footer>This is a footer</footer> */}
