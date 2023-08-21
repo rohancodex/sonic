@@ -36,7 +36,7 @@ const ProtectedLayout = () => {
                     <SheetTrigger asChild>
                         <div>
                             <Card className="px-10 hidden md:flex justify-between md:py-4">
-                                <div className=" flex items-center gap-2">
+                                <div className="flex items-center gap-2">
                                     <img
                                         className="h-14 w-14 rounded shadow-md"
                                         src={
@@ -156,7 +156,10 @@ const ProtectedLayout = () => {
                             </Card>
                         </div>
                     </SheetTrigger>
-                    <SheetContent side="bottom" className="w-full h-5/6 ">
+                    <SheetContent
+                        side="bottom"
+                        className="w-full h-5/6 flex flex-col justify-between"
+                    >
                         <SheetHeader>
                             <SheetTitle className="md:text-center text-xl">
                                 Now Playing
