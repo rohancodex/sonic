@@ -8,7 +8,7 @@ const SongCard = ({ id }: { id: number }) => {
         <Card
             className={`rounded-lg p-3 ${
                 id === 2
-                    ? "animate-border from-pink-500 via-red-500 to-yellow-500 bg-[length:400%_400%] [animation-duration:_6s] bg-gradient-to-r"
+                    ? "animate-border from-pink-500 via-red-500 to-yellow-500 bg-[length:400%_400%] [animation-duration:_4s] bg-gradient-to-r"
                     : ""
             }`}
         >
