@@ -7,7 +7,7 @@ import { protectedRoutes, publicRoutes } from "./Routes";
 function App() {
     return (
         <ThemeProvider defaultTheme="light" storageKey="color-theme">
-            <RouterProvider router={false ? protectedRoutes : publicRoutes} />
+            <RouterProvider router={true ? protectedRoutes : publicRoutes} />
         </ThemeProvider>
     );
 }
