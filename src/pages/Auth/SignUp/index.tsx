@@ -1,25 +1,54 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { AtSign, Lock, User } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
-import { z } from "zod";
+import { createClient } from "@supabase/supabase-js";
+import { Link, useNavigate } from "react-router-dom";
 
-import { FormInput, FormPassword } from "@/components/molecules/Form";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-import { Form } from "@/components/ui/form";
 import { Separator } from "@/components/ui/separator";
+import { useToast } from "@/components/ui/use-toast";
+import { ENV } from "@/lib/env";
 
-import { createUserSchema, initialValues } from "./helper";
+import CreateUserForm from "./CreateUserForm";
+import { ICreateUser } from "./helper";
+
+const supabase = createClient(ENV.VITE_SUPABASE_APP_URL, ENV.VITE_SUPABASE_SECRET);
 
 export default function Signup() {
-    const form = useForm<z.infer<typeof createUserSchema>>({
-        resolver: zodResolver(createUserSchema),
-        defaultValues: initialValues,
-    });
+    const { toast } = useToast();
+    const navigate = useNavigate();
 
-    const onSubmit = (values: z.infer<typeof createUserSchema>) => {
-        console.log(values);
+    const onSubmit = async (values: ICreateUser) => {
+        const { error } = await supabase.auth.signUp({
+            email: values.email,
+            password: values.password,
+            options: {
+                data: {
+                    full_name: values.full_name,
+                },
+            },
+        });
+
+        if (error) {
+            toast({
+                title: "Whoops! Something went wrong",
+                description: error.message,
+            });
+            return;
+        }
+        return navigate("/");
+    };
+
+    const handleOAuth = async () => {
+        const { error } = await supabase.auth.signInWithOAuth({
+            provider: "google",
+        });
+        if (error) {
+            toast({
+                title: "Whoops! Something went wrong",
+                description: error.message,
+            });
+            return;
+        }
+        return navigate("/");
     };
     return (
         <section className="lg:container flex justify-center lg:items-center lg:h-screen">
@@ -33,55 +62,25 @@ export default function Signup() {
                 </CardHeader>
                 <CardContent className="my-2 order-1 w-5/6">
                     <h1 className="text-2xl text-gray-600 font-semibold py-6 text-left hidden lg:block">
-                        Embark on the Journey: Sign Up Now!
+                        Embark on the musical Journey: Sign Up Now!
                     </h1>
-
-                    <Form {...form}>
-                        <form
-                            onSubmit={form.handleSubmit(onSubmit)}
-                            className="space-y-4"
-                        >
-                            <FormInput
-                                className="rounded-lg py-6"
-                                name="full_name"
-                                control={form.control}
-                                icon={<User className="stroke-slate-400 h-5 w-5" />}
-                                placeholder="Full Name"
-                            />
-                            <FormInput
-                                className="rounded-lg py-6"
-                                name="email"
-                                control={form.control}
-                                icon={<AtSign className="stroke-slate-400 h-5 w-5" />}
-                                placeholder="Email"
-                            />
-                            <FormPassword
-                                className="rounded-lg py-6"
-                                name="password"
-                                control={form.control}
-                                icon={<Lock className="stroke-slate-400 h-5 w-5" />}
-                                placeholder="Password"
-                            />
-                            {/* <Button className="bg-[#ea580c] rounded-lg w-full" type="submit">
-                                Sign Up
-                            </Button> */}
-                            <Button className="rounded-lg w-full" type="submit">
-                                Sign Up
-                            </Button>
-                        </form>
-                    </Form>
+                    <CreateUserForm onSubmit={onSubmit} />
                     <Separator orientation="horizontal" className="my-8" />
-                    <Button className="w-full py-5" variant={"outline"}>
+                    <Button
+                        onClick={handleOAuth}
+                        className="w-full py-5"
+                        variant={"outline"}
+                    >
                         <img className="h-5 w-5 mx-4" src="/google.svg" alt="google" />
                         <p className="text-gray-700">Continue with Google</p>
                     </Button>
                     <CardFooter className="justify-center order-2 pt-6">
-                        <h1 className="text-sm text-gray-600">
+                        <h4 className="text-sm text-gray-600">
                             Already have an account?{" "}
-                            <Link to="/login" className="text-[#186b66] font-medium">
+                            <Link to="/" className="text-[#186b66] font-medium">
                                 Log In
                             </Link>
-                        </h1>
+                        </h4>
                     </CardFooter>
                 </CardContent>
             </Card>

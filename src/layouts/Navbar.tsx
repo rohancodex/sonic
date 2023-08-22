@@ -1,5 +1,7 @@
+import { createClient, Session } from "@supabase/supabase-js";
 import { Moon, Sun } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -12,10 +14,43 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
-import { useTheme } from "@/providers/ThemeProvider";
+import { useToast } from "@/components/ui/use-toast";
+import { useTheme } from "@/context/ThemeProvider";
+import { ENV } from "@/lib/env";
+const supabase = createClient(ENV.VITE_SUPABASE_APP_URL, ENV.VITE_SUPABASE_SECRET);
 
 const Navbar = () => {
+    const [session, setSession] = useState<Session | null>(null);
     const { theme, setTheme } = useTheme();
+    const { toast } = useToast();
+    const navigate = useNavigate();
+
+    const handleLogout = async () => {
+        const { error } = await supabase.auth.signOut();
+        if (error) {
+            toast({
+                title: "Whoops! Something went wrong",
+                description: error.message,
+            });
+            return;
+        }
+        return navigate("/");
+    };
+
+    useEffect(() => {
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            setSession(session);
+        });
+
+        const {
+            data: { subscription },
+        } = supabase.auth.onAuthStateChange((_event, session) => {
+            setSession(session);
+        });
+
+        return () => subscription.unsubscribe();
+    }, []);
+    console.log(session);
     return (
         <>
             <nav className="py-4 md:py-8 flex justify-between items-center container">
@@ -46,10 +81,14 @@ const Navbar = () => {
                             >
                                 <Avatar className="h-12 w-12">
                                     <AvatarImage
-                                        src="https://github.com/shadcn.png"
-                                        alt="@shadcn"
+                                        src={session?.user?.user_metadata?.avatar_url}
+                                        alt="profile"
                                     />
-                                    <AvatarFallback>R</AvatarFallback>
+                                    <AvatarFallback>
+                                        {session?.user?.user_metadata?.full_name
+                                            ?.at(0)
+                                            ?.toUpperCase()}
+                                    </AvatarFallback>
                                 </Avatar>
                             </Button>
                         </DropdownMenuTrigger>
@@ -57,16 +96,18 @@ const Navbar = () => {
                             <DropdownMenuLabel className="font-normal">
                                 <div className="flex flex-col space-y-1">
                                     <p className="text-sm font-medium leading-none">
-                                        Rohan
+                                        {session?.user?.user_metadata?.full_name}
                                     </p>
                                     <p className="text-xs leading-none text-muted-foreground">
-                                        rohan.desai@torinit.com
+                                        {session?.user?.email}
                                     </p>
                                 </div>
                             </DropdownMenuLabel>
                             <DropdownMenuSeparator />
 
-                            <DropdownMenuItem>Log out</DropdownMenuItem>
+                            <DropdownMenuItem onClick={handleLogout}>
+                                Log out
+                            </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>

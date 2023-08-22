@@ -9,3 +9,5 @@ export const initialValues = {
     email: "",
     password: "",
 };
+
+export type ILoginUser = z.infer<typeof loginUserSchema>;
