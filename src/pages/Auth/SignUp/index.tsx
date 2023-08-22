@@ -16,7 +16,7 @@ const supabase = createClient(ENV.VITE_SUPABASE_APP_URL, ENV.VITE_SUPABASE_SECRE
 export default function Signup() {
     const { toast } = useToast();
     const navigate = useNavigate();
-
+console.log(getURL());
     const onSubmit = async (values: ICreateUser) => {
         const { error } = await supabase.auth.signUp({
             email: values.email,
