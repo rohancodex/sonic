@@ -4,3 +4,12 @@ import { twMerge } from "tailwind-merge";
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
+export const getURL = () => {
+    let url =
+        import.meta.env?.NEXT_PUBLIC_SITE_URL ??
+        import.meta.env?.NEXT_PUBLIC_VERCEL_URL ??
+        "http://localhost:5173/";
+    url = url.includes("http") ? url : `https://${url}`;
+    url = url.charAt(url.length - 1) === "/" ? url : `${url}/`;
+    return url;
+};
