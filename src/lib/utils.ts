@@ -12,5 +12,6 @@ export const getURL = () => {
         "http://localhost:5173/";
     url = url.includes("http") ? url : `https://${url}`;
     url = url.charAt(url.length - 1) === "/" ? url : `${url}/`;
+    console.log({url});
     return url;
 };
