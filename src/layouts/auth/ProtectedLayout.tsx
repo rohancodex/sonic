@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/sheet";
 import { Slider } from "@/components/ui/slider";
 
-import Navbar from "./Navbar";
+import Navbar from "../common/Navbar";
 
 const ProtectedLayout = () => {
     return (

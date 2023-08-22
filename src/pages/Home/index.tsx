@@ -1,12 +1,28 @@
 import { Search } from "lucide-react";
+import useSWRInfinite from "swr/infinite";
 
 import SongCard from "@/components/molecules/SongCard";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
+import { fetcher, fetchNextResults } from "./helper";
+
 const Home = () => {
+    const { data, error, size, setSize, isLoading } = useSWRInfinite<APIResponse>(
+        fetchNextResults,
+        fetcher,
+    );
+    const songs = data ? data.flatMap((page) => page.results) : [];
+
+    const loadMore = () => {
+        setSize(size + 1);
+    };
+
+    if (error) throw new Error("Error fetching songs...");
+
     return (
         <section className="py-6">
-            <h1 className="text-2xl tracking-tight font-bold scroll-m-20 lg:text-3xl">
+            <h1 className="text-left text-2xl tracking-tight font-bold scroll-m-20 lg:text-3xl">
                 Keep grooving,
             </h1>
             {/* Search */}
@@ -21,9 +37,14 @@ const Home = () => {
                 />
             </div>
             <div className="py-4 grid grid-cols-2 lg:grid-cols-4 gap-2">
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((id, index) => (
-                    <SongCard id={id} key={index} />
+                {songs.map((song) => (
+                    <SongCard song={song} key={song.trackId} />
                 ))}
+            </div>
+            <div className="flex justify-center">
+                <Button isLoading={isLoading} onClick={loadMore}>
+                    Load More...
+                </Button>
             </div>
         </section>
     );
