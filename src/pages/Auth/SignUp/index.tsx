@@ -6,6 +6,7 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
 import { ENV } from "@/lib/env";
+import { getURL } from "@/lib/utils";
 
 import CreateUserForm from "./CreateUserForm";
 import { ICreateUser } from "./helper";
@@ -40,6 +41,9 @@ export default function Signup() {
     const handleOAuth = async () => {
         const { error } = await supabase.auth.signInWithOAuth({
             provider: "google",
+            options: {
+                redirectTo: getURL(),
+            },
         });
         if (error) {
             toast({
