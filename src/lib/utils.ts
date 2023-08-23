@@ -4,6 +4,7 @@ import { twMerge } from "tailwind-merge";
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
+
 export const getURL = () => {
     let url =
         import.meta.env.NEXT_PUBLIC_SITE_URL ??
@@ -14,4 +15,10 @@ export const getURL = () => {
     url = url.charAt(url.length - 1) === "/" ? url : `${url}/`;
     console.log({ url });
     return url;
+};
+
+export const formatTime = (time: number) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
 };

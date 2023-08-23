@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import React, { ElementRef, useEffect, useRef, useState } from "react";
 
+import { formatTime } from "@/lib/utils";
 import { useStore } from "@/stores/store";
 
 import { Button } from "../ui/button";
@@ -20,7 +21,9 @@ const MusicPlayer = () => {
     const [volume, setVolume] = useState<number>(20);
     const [currentTime, setCurrentTime] = useState<number>(0);
 
-    const { currentSong, isPlaying, setIsPlaying } = useStore((state) => state);
+    const { currentSong, isPlaying, setIsPlaying, songs, setCurrentSong } = useStore(
+        (state) => state,
+    );
 
     useEffect(() => {
         if (audioPlayer.current) {
@@ -41,10 +44,23 @@ const MusicPlayer = () => {
         }
     };
 
-    const formatTime = (time: number) => {
-        const minutes = Math.floor(time / 60);
-        const seconds = Math.floor(time % 60);
-        return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+    const handleSongChange = (direction: "next" | "prev") => {
+        const currentIndex = songs.findIndex(
+            (song) => song.collectionId === currentSong?.collectionId,
+        );
+
+        let newIndex;
+        if (direction === "prev") {
+            newIndex = currentIndex === 0 ? songs.length - 1 : currentIndex - 1;
+        } else if (direction === "next") {
+            const nextIndex = currentIndex + 1;
+            newIndex = nextIndex >= songs.length ? 0 : nextIndex;
+        }
+        if (newIndex !== undefined) {
+            const newSong = songs.at(newIndex);
+            newSong && setCurrentSong(newSong);
+            setIsPlaying(true);
+        }
     };
 
     if (!currentSong) return null;
@@ -161,7 +177,7 @@ const MusicPlayer = () => {
                             audioPlayer.current &&
                             setCurrentTime(audioPlayer.current.currentTime)
                         }
-                        // onEnded={() => setIsPlaying(false)}
+                        onEnded={() => setIsPlaying(false)}
                     />
                     {/* timer values */}
                     <div className="flex justify-between">
@@ -179,7 +195,19 @@ const MusicPlayer = () => {
                 </div>
 
                 <div className="flex items-center justify-between w-full gap-2 pr-4 ">
-                    <div></div>
+                    <div className="flex gap-4 px-4 py-2">
+                        <img
+                            className="w-14 h-14"
+                            src={currentSong?.artworkUrl100}
+                            alt="album art"
+                        />
+                        <div>
+                            <h3 className="text-base font-medium">
+                                {currentSong.trackName}
+                            </h3>
+                            <p className="text-sm">{currentSong.artistName}</p>
+                        </div>
+                    </div>
                     <div className="flex items-center gap-4">
                         <Button
                             onClick={togglePlayPause}
@@ -192,6 +220,7 @@ const MusicPlayer = () => {
                         <Button
                             onClick={(e) => {
                                 e.stopPropagation();
+                                handleSongChange("prev");
                             }}
                             variant={"ghost"}
                             className="rounded-full "
@@ -214,6 +243,7 @@ const MusicPlayer = () => {
                         <Button
                             onClick={(e) => {
                                 e.stopPropagation();
+                                handleSongChange("next");
                             }}
                             variant={"ghost"}
                             className="rounded-full "
