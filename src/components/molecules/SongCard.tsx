@@ -29,16 +29,16 @@ const SongCard = ({ song }: { song: MusicTrack }) => {
                 }
                 alt="song"
             />
-            <CardContent className="p-0 pt-3 flex justify-between items-center">
-                <div>
-                    <h4 className="scroll-m-20 text-base font-medium tracking-tight pt-1 text-clip">
+            <CardContent className="flex items-center justify-between p-0 pt-3">
+                <div className="w-5/6 space-y-1">
+                    <h4 className="pt-1 text-base font-medium tracking-tight line-clamp-1 scroll-m-20 text-clip">
                         {song.trackName}
                     </h4>
-                    <p className="leading-4 text-xs text-ellipsis">{song.artistName}</p>
+                    <p className="text-xs leading-4 text-ellipsis">{song.artistName}</p>
                 </div>
 
-                <Button variant={"link"} className="rounded-full px-2 right-1 bottom-2">
-                    <Heart className="h-5 w-5 stroke-" />
+                <Button variant={"link"} className="px-2 rounded-full right-1 bottom-2">
+                    <Heart className="w-5 h-5 stroke-" />
                 </Button>
             </CardContent>
         </Card>
