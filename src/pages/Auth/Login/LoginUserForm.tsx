@@ -21,25 +21,25 @@ const LoginUserForm = ({
     const { isSubmitting } = form.formState;
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4">
                 <FormInput
-                    className="rounded-lg py-6"
+                    className="py-6 rounded-lg"
                     name="email"
                     control={form.control}
-                    icon={<AtSign className="stroke-slate-400 h-5 w-5" />}
+                    icon={<AtSign className="w-5 h-5 stroke-slate-400" />}
                     placeholder="Email"
                 />
                 <FormPassword
-                    className="rounded-lg py-6"
+                    className="py-6 rounded-lg"
                     name="password"
                     control={form.control}
-                    icon={<Lock className="stroke-slate-400 h-5 w-5" />}
+                    icon={<Lock className="w-5 h-5 stroke-slate-400" />}
                     placeholder="Password"
                 />
 
                 <Button
                     isLoading={isSubmitting}
-                    className="rounded-lg w-full"
+                    className="w-full rounded-lg"
                     type="submit"
                 >
                     Sign In

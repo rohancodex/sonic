@@ -60,8 +60,8 @@ export default function Login() {
                         alt="serene-header"
                     />
                 </CardHeader>
-                <CardContent className="my-2 order-1 w-5/6">
-                    <h1 className="text-2xl text-gray-600 font-semibold py-6 text-left hidden lg:block">
+                <CardContent className="my-2 order-1 w-5/6 mx-auto">
+                    <h1 className="text-2xl text-gray-600 font-semibold py-6 text-left  lg:block">
                         Continue listening! Just a step away
                     </h1>
                     <LoginUserForm onSubmit={onSubmit} />

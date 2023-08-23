@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
-import { useTheme } from "@/context/ThemeProvider";
+import { useTheme } from "@/contexts/ThemeProvider";
 import { ENV } from "@/lib/env";
 const supabase = createClient(ENV.VITE_SUPABASE_APP_URL, ENV.VITE_SUPABASE_SECRET);
 

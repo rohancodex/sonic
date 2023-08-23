@@ -1,12 +1,20 @@
 /* eslint-disable no-constant-condition */
 import { Heart } from "lucide-react";
 
+import { useStore } from "@/stores/store";
+
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
 
 const SongCard = ({ song }: { song: MusicTrack }) => {
+    const { setCurrentSong } = useStore((state) => state);
+    const handleClick = () => {
+        setCurrentSong(song);
+    };
+
     return (
         <Card
+            onClick={handleClick}
             className={`rounded-lg p-3 hover:cursor-pointer ${
                 false
                     ? "animate-border from-pink-500 via-red-500 to-yellow-500 bg-[length:400%_400%] [animation-duration:_4s] bg-gradient-to-r"
