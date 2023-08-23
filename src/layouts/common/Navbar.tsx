@@ -17,9 +17,11 @@ import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
 import { useTheme } from "@/contexts/ThemeProvider";
 import { ENV } from "@/lib/env";
+import { useStore } from "@/stores/store";
 const supabase = createClient(ENV.VITE_SUPABASE_APP_URL, ENV.VITE_SUPABASE_SECRET);
 
 const Navbar = () => {
+    const { reset } = useStore((state) => state);
     const [session, setSession] = useState<Session | null>(null);
     const { theme, setTheme } = useTheme();
     const { toast } = useToast();
@@ -34,6 +36,8 @@ const Navbar = () => {
             });
             return;
         }
+        // reset zustand store
+        reset();
         return navigate("/");
     };
 
@@ -50,26 +54,25 @@ const Navbar = () => {
 
         return () => subscription.unsubscribe();
     }, []);
-    console.log(session);
     return (
-        <>
-            <nav className="py-4 md:py-8 flex justify-between items-center container">
+        <header>
+            <nav className="container flex items-center justify-between py-4 md:py-8">
                 <Link
                     to="/"
-                    className="text-2xl tracking-tight font-bold scroll-m-20 lg:text-3xl"
+                    className="text-2xl font-bold tracking-tight scroll-m-20 lg:text-3xl"
                 >
                     Sonic
                 </Link>
-                <div className="gap-5 md:gap-10 flex items-center">
+                <div className="flex items-center gap-5 md:gap-10">
                     <Button
-                        className="rounded-full py-6"
+                        className="py-6 rounded-full"
                         onClick={() => setTheme(theme === "light" ? "dark" : "light")}
                         variant={"outline"}
                     >
                         {theme === "light" ? (
-                            <Moon className="h-5 w-5" />
+                            <Moon className="w-5 h-5" />
                         ) : (
-                            <Sun className="h-5 w-5" />
+                            <Sun className="w-5 h-5" />
                         )}
                     </Button>
 
@@ -77,9 +80,9 @@ const Navbar = () => {
                         <DropdownMenuTrigger asChild>
                             <Button
                                 variant="ghost"
-                                className="relative h-8 w-8 rounded-full"
+                                className="relative w-8 h-8 rounded-full"
                             >
-                                <Avatar className="h-12 w-12">
+                                <Avatar className="w-12 h-12">
                                     <AvatarImage
                                         src={session?.user?.user_metadata?.avatar_url}
                                         alt="profile"
@@ -113,7 +116,7 @@ const Navbar = () => {
                 </div>
             </nav>
             <Separator />
-        </>
+        </header>
     );
 };
 

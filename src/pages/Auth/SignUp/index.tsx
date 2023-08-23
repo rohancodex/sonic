@@ -55,28 +55,28 @@ export default function Signup() {
         return navigate("/");
     };
     return (
-        <section className="lg:container flex justify-center lg:items-center lg:h-screen">
+        <section className="flex justify-center lg:container lg:items-center lg:h-screen">
             <Card className="w-5/6 lg:p-8 lg:grid lg:grid-cols-2 shadow-[rgba(7,_65,_210,_0.1)_0px_10px_32px]">
-                <CardHeader className="items-center lg:justify-center order-2">
+                <CardHeader className="items-center order-2 lg:justify-center">
                     <img
                         className="w-52 h-52 lg:w-[30rem] lg:h-[30rem]"
-                        src={"/auth.png"}
+                        src={"/auth-1.webp"}
                         alt="serene-header"
                     />
                 </CardHeader>
-                <CardContent className="my-2 order-1 w-5/6 mx-auto">
-                    <h1 className="text-2xl text-gray-600 font-semibold py-6 text-left lg:block">
+                <CardContent className="order-1 w-5/6 mx-auto my-2">
+                    <h1 className="py-6 text-2xl font-semibold text-left text-gray-600 lg:block">
                         Embark on the musical Journey: Sign Up Now!
                     </h1>
                     <CreateUserForm onSubmit={onSubmit} />
                     <Separator orientation="horizontal" className="my-8" />
                     <Button
                         onClick={handleOAuth}
-                        className="w-full py-5"
+                        className="w-full py-6"
                         variant={"outline"}
                     >
-                        <img className="h-5 w-5 mx-4" src="/google.svg" alt="google" />
-                        <p className="text-gray-700">Continue with Google</p>
+                        <img className="w-5 h-5 mx-4" src="/google.svg" alt="google" />
+                        <p className="text-gray-700 ">Continue with Google</p>
                     </Button>
                     <CardFooter className="justify-center order-2 pt-6">
                         <h4 className="text-sm text-gray-600">

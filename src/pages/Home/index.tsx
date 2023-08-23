@@ -6,6 +6,7 @@ import useSWRInfinite from "swr/infinite";
 import SongCard from "@/components/molecules/SongCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Loader from "@/components/ui/Loader";
 import { useStore } from "@/stores/store";
 
 import { fetcher, fetchNextResults } from "./helper";
@@ -19,12 +20,16 @@ const Home = () => {
         (pageIndex, previousPageData) =>
             fetchNextResults(pageIndex, previousPageData, debouncedSearchTerm),
         fetcher,
+        { parallel: true, revalidateFirstPage: false },
     );
     const songs = data ? data.flatMap((page) => page.results) : [];
 
     const loadMore = () => {
         setSize(size + 1);
     };
+
+    const isLoadingMore =
+        isLoading || (size > 0 && data && typeof data[size - 1] === "undefined");
 
     useEffect(() => {
         setSongs(songs);
@@ -67,18 +72,27 @@ const Home = () => {
                     placeholder="Artists, songs, or podcasts"
                 />
             </div>
-            <div className="grid grid-cols-2 gap-2 py-4 lg:grid-cols-4">
-                {songs.length ? (
-                    songs.map((song) => <SongCard song={song} key={song.trackId} />)
-                ) : (
-                    <h2 className="mx-auto text-2xl font-semibold text-center">
-                        No results found!
-                    </h2>
-                )}
-            </div>
+            {isLoading ? (
+                <Loader />
+            ) : (
+                <div className="grid grid-cols-2 gap-2 py-4 lg:grid-cols-4">
+                    {songs.length ? (
+                        songs.map((song) => <SongCard song={song} key={song.trackId} />)
+                    ) : (
+                        <h2 className="mx-auto text-2xl font-semibold text-center">
+                            No results found!
+                        </h2>
+                    )}
+                </div>
+            )}
             {songs.length ? (
                 <div className="flex justify-center">
-                    <Button isLoading={isLoading} onClick={loadMore}>
+                    <Button
+                        isLoading={isLoadingMore}
+                        variant={"outline"}
+                        className="rounded-full"
+                        onClick={loadMore}
+                    >
                         Load More...
                     </Button>
                 </div>

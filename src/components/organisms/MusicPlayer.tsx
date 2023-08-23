@@ -45,6 +45,8 @@ const MusicPlayer = () => {
     };
 
     const handleSongChange = (direction: "next" | "prev") => {
+        if (!songs.length) return setIsPlaying(false);
+
         const currentIndex = songs.findIndex(
             (song) => song.collectionId === currentSong?.collectionId,
         );
@@ -67,96 +69,8 @@ const MusicPlayer = () => {
 
     return (
         <div>
-            <Card className="justify-between hidden px-10 md:flex md:flex-col md:items-center md:py-4">
-                {/* <div className="flex items-center gap-2">
-                    <img
-                        className="rounded shadow-md h-14 w-14"
-                        src={
-                            "https://www.udiscovermusic.com/wp-content/uploads/2019/06/Imagine-Dragons-Evolve-album-cover-820-1536x1536.jpg"
-                        }
-                        alt="currentSong"
-                    />
-                    <div className="pl-2">
-                        <h5 className="pt-1 text-base font-medium tracking-tight scroll-m-20">
-                            Believer
-                        </h5>
-                        <p className="text-xs leading-4">Imagine Dragons</p>
-                    </div>
-                    <Button variant={"ghost"}>
-                        <Heart className="hover:fill-red-500" />
-                    </Button>
-                </div>
-                <div className="flex items-center gap-2 pr-4">
-                    <div className="flex items-center gap-4">
-                        <Button
-                            onClick={handlePlay}
-                            variant={"ghost"}
-                            className="rounded-full "
-                            size={"icon"}
-                        >
-                            <Shuffle className="w-5 h-5 hover:stroke-primary/90" />
-                        </Button>
-                        <Button
-                            onClick={(e) => {
-                                e.stopPropagation();
-                            }}
-                            variant={"ghost"}
-                            className="rounded-full "
-                            size={"icon"}
-                        >
-                            <SkipBack className="fill-foreground stroke-foreground" />
-                        </Button>
-                        <Button
-                            onClick={(e) => {
-                                e.stopPropagation();
-                            }}
-                            variant={"outline"}
-                            size="icon"
-                            className="rounded-full"
-                        >
-                            <Play className="w-4 h-4 fill-foreground stroke-foreground" />
-                        </Button>
-                        <audio
-                            ref={audioRef}
-                            src={currentSong?.previewUrl}
-                            autoPlay
-                            onTimeUpdate={() =>
-                                audioRef?.current &&
-                                setCurrentTime(audioRef.current?.currentTime)
-                            }
-                            onDurationChange={() =>
-                                audioRef?.current &&
-                                setSeekTime(audioRef.current.duration)
-                            }
-                            // onEnded={handleSongEnded}
-                        />
-                        <Button
-                            onClick={(e) => {
-                                e.stopPropagation();
-                            }}
-                            variant={"ghost"}
-                            className="rounded-full "
-                            size={"icon"}
-                        >
-                            <SkipForward className="fill-foreground stroke-foreground" />
-                        </Button>
-                        <Button
-                            onClick={(e) => {
-                                e.stopPropagation();
-                            }}
-                            variant={"ghost"}
-                            className="rounded-full "
-                            size={"icon"}
-                        >
-                            <Repeat className="w-5 h-5 hover:stroke-primary/90" />
-                        </Button>
-                    </div>
-                </div>
-                <div className="flex items-center gap-4">
-                    <Volume2 />
-                    <Slider defaultValue={[33]} max={100} step={1} className="w-36" />
-                </div> */}
-                <div className="flex flex-col w-full gap-2 px-4">
+            <Card className=" md:px-10 md:justify-between md:flex md:flex-col md:items-center md:py-4">
+                <div className="flex flex-col w-full gap-2 px-4 py-4">
                     {/* progress bar */}
                     <Slider
                         onClick={(e) => e.preventDefault()}
@@ -177,7 +91,7 @@ const MusicPlayer = () => {
                             audioPlayer.current &&
                             setCurrentTime(audioPlayer.current.currentTime)
                         }
-                        onEnded={() => setIsPlaying(false)}
+                        onEnded={() => handleSongChange("next")}
                     />
                     {/* timer values */}
                     <div className="flex justify-between">
@@ -202,24 +116,24 @@ const MusicPlayer = () => {
                             alt="album art"
                         />
                         <div>
-                            <h3 className="text-base font-medium">
+                            <h3 className="text-base font-medium line-clamp-2">
                                 {currentSong.trackName}
                             </h3>
-                            <p className="text-sm">{currentSong.artistName}</p>
+                            <p className="text-sm line-clamp-1">
+                                {currentSong.artistName}
+                            </p>
                         </div>
                     </div>
                     <div className="flex items-center gap-4">
                         <Button
-                            onClick={togglePlayPause}
                             variant={"ghost"}
-                            className="rounded-full"
+                            className="hidden rounded-full md:block"
                             size={"icon"}
                         >
                             <Shuffle className="w-5 h-5 hover:stroke-primary/90" />
                         </Button>
                         <Button
-                            onClick={(e) => {
-                                e.stopPropagation();
+                            onClick={() => {
                                 handleSongChange("prev");
                             }}
                             variant={"ghost"}
@@ -241,8 +155,7 @@ const MusicPlayer = () => {
                             )}
                         </Button>
                         <Button
-                            onClick={(e) => {
-                                e.stopPropagation();
+                            onClick={() => {
                                 handleSongChange("next");
                             }}
                             variant={"ghost"}
@@ -256,13 +169,13 @@ const MusicPlayer = () => {
                                 e.stopPropagation();
                             }}
                             variant={"ghost"}
-                            className="rounded-full "
+                            className="hidden rounded-full md:block"
                             size={"icon"}
                         >
                             <Repeat className="w-5 h-5 hover:stroke-primary/90" />
                         </Button>
                     </div>
-                    <div className="flex items-center gap-4">
+                    <div className="items-center hidden gap-4 md:flex">
                         <Volume2 />
                         <Slider
                             defaultValue={[33]}
@@ -278,38 +191,6 @@ const MusicPlayer = () => {
                             }}
                         />
                     </div>
-                </div>
-            </Card>
-
-            {/* mobile footer */}
-            <Card className="flex justify-between md:hidden">
-                <div className="flex items-center">
-                    <img
-                        className="rounded shadow-md h-14 w-14"
-                        src={
-                            "https://www.udiscovermusic.com/wp-content/uploads/2019/06/Imagine-Dragons-Evolve-album-cover-820-1536x1536.jpg"
-                        }
-                        alt="currentSong"
-                    />
-                    <div className="pl-2">
-                        <h5 className="pt-1 text-base font-medium tracking-tight scroll-m-20">
-                            Believer
-                        </h5>
-                        <p className="text-xs leading-4">Imagine Dragons</p>
-                    </div>
-                </div>
-                <div className="flex items-center gap-2 pr-4">
-                    <SkipBack className="fill-foreground stroke-foreground" />
-                    <Button
-                        onClick={(e) => {
-                            e.stopPropagation();
-                        }}
-                        variant={"outline"}
-                        className="px-3 py-2 rounded-full"
-                    >
-                        <Play className="w-4 h-4 fill-foreground stroke-foreground" />
-                    </Button>
-                    <SkipForward className="fill-foreground stroke-foreground" />
                 </div>
             </Card>
         </div>

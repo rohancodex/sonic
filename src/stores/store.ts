@@ -1,20 +1,23 @@
 import { create } from "zustand";
-interface State {
-    currentSong: MusicTrack | null;
-    isPlaying: boolean;
-    songs: MusicTrack[];
-}
-interface Action {
-    setCurrentSong: (currentSong: State["currentSong"]) => void;
-    setIsPlaying: (currentSong: State["isPlaying"]) => void;
-    setSongs: (currentSong: State["songs"]) => void;
-}
+
+import { Action, State } from "./type";
+
+const initialValues = {
+    currentSong: null,
+    isPlaying: false,
+    songs: [],
+    isDialogOpen: false,
+    songDetails: null,
+};
 
 export const useStore = create<State & Action>((set) => ({
-    currentSong: null,
+    ...initialValues,
     setCurrentSong: (song: MusicTrack | null) => set(() => ({ currentSong: song })),
-    isPlaying: false,
     setIsPlaying: (isPlaying: boolean) => set(() => ({ isPlaying })),
-    songs: [],
     setSongs: (newSongs: MusicTrack[]) => set(() => ({ songs: newSongs })),
+    setIsDialogOpen: (isDialogOpen: boolean) => set(() => ({ isDialogOpen })),
+    setSongDetails: (song: MusicTrack | null) => set(() => ({ songDetails: song })),
+    reset: () => {
+        set(initialValues);
+    },
 }));

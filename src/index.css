@@ -30,13 +30,13 @@
     }
 
     .dark {
-        --background: 20 14.3% 4.1%;
+        --background: 220 9% 7%;
         --foreground: 60 9.1% 97.8%;
-        --card: 20 14.3% 4.1%;
+        --card: 220 9% 7%;
         --card-foreground: 60 9.1% 97.8%;
         --popover: 20 14.3% 4.1%;
         --popover-foreground: 60 9.1% 97.8%;
-        --primary: 176.4 63.4% 25.7%;
+        --primary: 141 73% 42%;
         --primary-foreground: 60 9.1% 97.8%;
         --secondary: 12 6.5% 15.1%;
         --secondary-foreground: 60 9.1% 97.8%;
@@ -55,6 +55,8 @@
 body {
     line-height: 1.4;
     font-family: "Poppins", sans-serif;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-synthesis: none;
