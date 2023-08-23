@@ -1,5 +1,6 @@
+import { debounce } from "lodash";
 import { Search } from "lucide-react";
-import { useEffect } from "react";
+import { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react";
 import useSWRInfinite from "swr/infinite";
 
 import SongCard from "@/components/molecules/SongCard";
@@ -10,9 +11,13 @@ import { useStore } from "@/stores/store";
 import { fetcher, fetchNextResults } from "./helper";
 
 const Home = () => {
+    const [search, setSearch] = useState("");
+    const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
     const { setSongs } = useStore((state) => state);
+
     const { data, error, size, setSize, isLoading } = useSWRInfinite<APIResponse>(
-        fetchNextResults,
+        (pageIndex, previousPageData) =>
+            fetchNextResults(pageIndex, previousPageData, debouncedSearchTerm),
         fetcher,
     );
     const songs = data ? data.flatMap((page) => page.results) : [];
@@ -24,6 +29,23 @@ const Home = () => {
     useEffect(() => {
         setSongs(songs);
     }, [songs.length, setSongs]);
+
+    const debouncedSearch = useMemo(
+        () =>
+            debounce((searchTerm) => {
+                setDebouncedSearchTerm(searchTerm);
+            }, 500),
+        [],
+    );
+
+    const handleInputChange = useCallback(
+        (event: ChangeEvent<HTMLInputElement>) => {
+            const { value } = event.target;
+            setSearch(value);
+            debouncedSearch(value);
+        },
+        [debouncedSearch],
+    );
 
     if (error) throw new Error("Error fetching songs...");
 
@@ -38,21 +60,29 @@ const Home = () => {
                     <Search className="h-4 stroke-gray-500" />
                 </div>
                 <Input
+                    value={search}
+                    onChange={handleInputChange}
                     type="search"
                     className="block w-full p-4 py-6 pl-10"
                     placeholder="Artists, songs, or podcasts"
                 />
             </div>
             <div className="grid grid-cols-2 gap-2 py-4 lg:grid-cols-4">
-                {songs.map((song) => (
-                    <SongCard song={song} key={song.trackId} />
-                ))}
+                {songs.length ? (
+                    songs.map((song) => <SongCard song={song} key={song.trackId} />)
+                ) : (
+                    <h2 className="mx-auto text-2xl font-semibold text-center">
+                        No results found!
+                    </h2>
+                )}
             </div>
-            <div className="flex justify-center">
-                <Button isLoading={isLoading} onClick={loadMore}>
-                    Load More...
-                </Button>
-            </div>
+            {songs.length ? (
+                <div className="flex justify-center">
+                    <Button isLoading={isLoading} onClick={loadMore}>
+                        Load More...
+                    </Button>
+                </div>
+            ) : null}
         </section>
     );
 };

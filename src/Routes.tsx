@@ -19,6 +19,7 @@ export const publicRoutes = createBrowserRouter([
                 element: <Signup />,
             },
         ],
+        errorElement: <>Something went wrong</>,
     },
 ]);
 
@@ -32,5 +33,6 @@ export const protectedRoutes = createBrowserRouter([
                 element: <Home />,
             },
         ],
+        errorElement: <>Something went wrong</>,
     },
 ]);
