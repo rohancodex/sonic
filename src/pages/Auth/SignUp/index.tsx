@@ -16,7 +16,7 @@ const supabase = createClient(ENV.VITE_SUPABASE_APP_URL, ENV.VITE_SUPABASE_SECRE
 export default function Signup() {
     const { toast } = useToast();
     const navigate = useNavigate();
-console.log(getURL());
+    console.log(getURL());
     const onSubmit = async (values: ICreateUser) => {
         const { error } = await supabase.auth.signUp({
             email: values.email,
@@ -64,8 +64,8 @@ console.log(getURL());
                         alt="serene-header"
                     />
                 </CardHeader>
-                <CardContent className="my-2 order-1 w-5/6">
-                    <h1 className="text-2xl text-gray-600 font-semibold py-6 text-left hidden lg:block">
+                <CardContent className="my-2 order-1 w-5/6 mx-auto">
+                    <h1 className="text-2xl text-gray-600 font-semibold py-6 text-left lg:block">
                         Embark on the musical Journey: Sign Up Now!
                     </h1>
                     <CreateUserForm onSubmit={onSubmit} />

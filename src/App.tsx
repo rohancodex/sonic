@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { RouterProvider } from "react-router-dom";
 
 import { Toaster } from "./components/ui/toaster";
-import { ThemeProvider } from "./context/ThemeProvider";
+import { ThemeProvider } from "./contexts/ThemeProvider";
 import { ENV } from "./lib/env";
 import { protectedRoutes, publicRoutes } from "./Routes";
 

@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 
-import ProtectedLayout from "./layouts/auth/ProtectedLayout";
+import ProtectedLayout from "./layouts/protected/ProtectedLayout";
 import PublicLayout from "./layouts/public/PublicLayout";
 import Login from "./pages/Auth/Login";
 import Signup from "./pages/Auth/SignUp";
